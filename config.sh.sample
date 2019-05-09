@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Config
+export APP_PORT=3000
+export API_URL=
+export API_DELAY=60000
+export KEYS_HOOKS="{"trance":[""]}"

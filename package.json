@@ -1,0 +1,25 @@
+{
+  "name": "diupcomingshows",
+  "version": "1.0.0",
+  "description": "DI Upcoming Shows through Webhook notifications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": ". config.sh && node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/beshur/diUpcomingShows.git"
+  },
+  "author": "Alex Buznik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/beshur/diUpcomingShows/issues"
+  },
+  "homepage": "https://github.com/beshur/diUpcomingShows#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  }
+}
