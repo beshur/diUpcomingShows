@@ -4,12 +4,17 @@
 const express = require('express')
 const app = express()
 
-const PORT = process.env.APP_PORT
+const PORT = parseInt(process.env.APP_PORT)
 const API_URL = process.env.API_URL
-const API_DELAY = process.env.API_DELAY
-const KEYS_HOOKS = process.env.KEYS_HOOKS
+const API_DELAY = parseInt(process.env.API_DELAY)
+console.log(process.env.KEYS_HOOKS)
+const KEYS_HOOKS = JSON.parse(process.env.KEYS_HOOKS)
+const NOTIFY_BEFORE = parseInt(process.env.NOTIFY_BEFORE)
 
 const ApiRequest = require('./lib/apiRequest')
+const NotifyHooks = require('./lib/NotifyHooks')
+
+app.use(express.static('public'))
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -20,8 +25,13 @@ let apiRequest = new ApiRequest({
   API_URL,
   API_DELAY
 })
-
-
-apiRequest.on('upcoming', (result) => {
-  console.log('upcoming', result);
+let notifyHooks = new NotifyHooks({
+  API_DELAY,
+  KEYS_HOOKS,
+  NOTIFY_BEFORE
 })
+
+apiRequest.getShowsAndResetTimer()
+
+
+apiRequest.on('upcoming', notifyHooks.onUpcomingShows)
