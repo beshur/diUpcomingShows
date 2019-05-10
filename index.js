@@ -4,7 +4,7 @@
 const express = require('express')
 const app = express()
 
-const PORT = parseInt(process.env.APP_PORT)
+const PORT = parseInt(process.env.PORT)
 const API_URL = process.env.API_URL
 const API_DELAY = parseInt(process.env.API_DELAY)
 console.log(process.env.KEYS_HOOKS)
