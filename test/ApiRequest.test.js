@@ -2,11 +2,14 @@
 
 const chai = require('chai')
 const ApiRequest = require('../lib/ApiRequest')
+const config = require('../config')
 
 const CORRECT_CONFIG = {
-  API_URL: 'url',
-  API_DELAY: 60000
+  API_URL: config.get('API_URL'),
+  API_DELAY: config.get('API_DELAY')
 }
+
+console.log('CORRECT_CONFIG', CORRECT_CONFIG)
 
 describe('ApiRequest instance', function() {
   it('should instantiate with config', function() {

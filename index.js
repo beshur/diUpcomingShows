@@ -3,33 +3,28 @@
 
 const express = require('express')
 const app = express()
-
-const PORT = parseInt(process.env.PORT)
-const API_URL = process.env.API_URL
-const API_DELAY = parseInt(process.env.API_DELAY)
-const KEYS_HOOKS = JSON.parse(process.env.KEYS_HOOKS)
-const NOTIFY_BEFORE = parseInt(process.env.NOTIFY_BEFORE)
+const config = require('./config')
 
 const ApiRequest = require('./lib/apiRequest')
 const NotifyHooks = require('./lib/NotifyHooks')
 
-console.log('Hooks', process.env.KEYS_HOOKS)
+console.log('Hooks', config.get('KEYS_HOOKS'))
 
 app.use(express.static('public'))
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
+app.listen(config.get('PORT'), () => console.log(`Example app listening on port ${config.get('PORT')}!`))
 
 
 let apiRequest = new ApiRequest({
-  API_URL,
-  API_DELAY
+  API_URL: config.get('API_URL'),
+  API_DELAY: config.get('API_DELAY')
 })
 let notifyHooks = new NotifyHooks({
-  API_DELAY,
-  KEYS_HOOKS,
-  NOTIFY_BEFORE
+  API_DELAY: config.get('API_DELAY'),
+  KEYS_HOOKS: config.get('KEYS_HOOKS'),
+  NOTIFY_BEFORE: config.get('NOTIFY_BEFORE')
 })
 
 apiRequest.getShowsAndResetTimer()
