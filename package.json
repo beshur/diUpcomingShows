@@ -4,7 +4,7 @@
   "description": "DI Upcoming Shows through Webhook notifications",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "startLocalConf": ". config.sh && node index.js",
     "start": "node index.js"
   },
@@ -24,5 +24,11 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "nock": "^10.0.6",
+    "sinon": "^7.3.2"
   }
 }
