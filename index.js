@@ -19,6 +19,7 @@ app.listen(config.get('PORT'), () => console.log(`Example app listening on port 
 
 let apiRequest = new ApiRequest({
   API_URL: config.get('API_URL'),
+  API_UPCOMING_PATH: config.get('API_UPCOMING_PATH'),
   API_DELAY: config.get('API_DELAY')
 })
 let notifyHooks = new NotifyHooks({
