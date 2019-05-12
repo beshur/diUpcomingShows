@@ -5,10 +5,9 @@ const express = require('express')
 const app = express()
 const config = require('./config')
 
-const ApiRequest = require('./lib/apiRequest')
+const ApiRequest = require('./lib/ApiRequest')
+const RequestRepeater = require('./lib/RequestRepeater')
 const NotifyHooks = require('./lib/NotifyHooks')
-
-console.log('Hooks', config.get('KEYS_HOOKS'))
 
 app.use(express.static('public'))
 
@@ -18,9 +17,11 @@ app.listen(config.get('PORT'), () => console.log(`Example app listening on port 
 
 
 let apiRequest = new ApiRequest({
-  API_URL: config.get('API_URL'),
-  API_UPCOMING_PATH: config.get('API_UPCOMING_PATH'),
-  API_DELAY: config.get('API_DELAY')
+  API_URL: config.get('API_URL')
+})
+let apiRequestRepeater = new RequestRepeater({
+  request: apiRequest.getShows,
+  delay: config.get('API_DELAY')
 })
 let notifyHooks = new NotifyHooks({
   API_DELAY: config.get('API_DELAY'),
@@ -28,7 +29,8 @@ let notifyHooks = new NotifyHooks({
   NOTIFY_BEFORE: config.get('NOTIFY_BEFORE')
 })
 
-apiRequest.getShowsAndResetTimer()
-
-
-apiRequest.on('upcoming', notifyHooks.onUpcomingShows)
+apiRequestRepeater.requestAndRepeat()
+apiRequestRepeater.on('result', function(result, error) {
+  console.log('apiRequestRepeater error', error)
+  notifyHooks.onUpcomingShows(result)
+})

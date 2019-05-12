@@ -1,7 +1,8 @@
 'use strict'
 
-const chai = require('chai')
+const assert = require('chai').assert
 const nock = require('nock')
+const sinon = require('sinon')
 const ApiRequest = require('../lib/ApiRequest')
 const config = require('../config')
 const SHOWS_MOCK = {
@@ -17,21 +18,19 @@ const CORRECT_CONFIG = {
   API_DELAY: config.get('API_DELAY')
 }
 
-console.log('CORRECT_CONFIG', CORRECT_CONFIG)
-
 describe('ApiRequest instance', function() {
   it('should instantiate with config', function() {
     const apiRequest = new ApiRequest(CORRECT_CONFIG)
   })
 
   it('should fail without config', function() {
-    chai.assert.throws(function() {
+    assert.throws(function() {
       const apiRequest = new ApiRequest()
     }, 'Options is not an object')
   })
 
   it('should fail without API_URL option', function() {
-    chai.assert.throws(function() {
+    assert.throws(function() {
       const apiRequest = new ApiRequest({
         API_DELAY: 1
       })
@@ -39,34 +38,19 @@ describe('ApiRequest instance', function() {
   })
 
   it('should fail with empty API_URL option', function() {
-    chai.assert.throws(function() {
+    assert.throws(function() {
       const apiRequest = new ApiRequest({
         API_DELAY: 1,
         API_URL: ''
       })
     }, 'API_URL is empty')
   })
-
-  it('should fail without API_DELAY option', function() {
-    chai.assert.throws(function() {
-      const apiRequest = new ApiRequest({
-        API_URL: '1'
-      })
-    }, 'API_DELAY option should be a number')
-  })
-
-  it('should fail with API_DELAY less than 1', function() {
-    chai.assert.throws(function() {
-      const apiRequest = new ApiRequest({
-        API_URL: '1',
-        API_DELAY: 0
-      })
-    }, 'API_DELAY should be greater than 0')
-  })
 })
 
 describe('ApiRequest functions', function() {
+
   const scope = nock(CORRECT_CONFIG.API_URL)
+    .persist()
     .get('/')
     .reply(200, SHOWS_MOCK)
 
@@ -74,7 +58,7 @@ describe('ApiRequest functions', function() {
     const apiRequest = new ApiRequest(CORRECT_CONFIG)
     apiRequest.getShows()
       .then(function(result) {
-        chai.assert.deepEqual(JSON.parse(result), SHOWS_MOCK, 'Wrong API response')
+        assert.deepEqual(JSON.parse(result), SHOWS_MOCK, 'Wrong API response')
         done()
       }).catch(function(err) {
         console.error(err);
@@ -82,5 +66,3 @@ describe('ApiRequest functions', function() {
       })
   })
 })
-
-
