@@ -7,7 +7,8 @@ const config = require('./config')
 
 const ApiRequest = require('./lib/ApiRequest')
 const RequestRepeater = require('./lib/RequestRepeater')
-const NotifyHooks = require('./lib/NotifyHooks')
+const ShowsParser = require('./lib/ShowsParser')
+const NotificationFactory = require('./lib/NotificationFactory')
 
 app.use(express.static('public'))
 
@@ -23,14 +24,16 @@ let apiRequestRepeater = new RequestRepeater({
   request: apiRequest.getShows,
   delay: config.get('API_DELAY')
 })
-let notifyHooks = new NotifyHooks({
-  API_DELAY: config.get('API_DELAY'),
-  KEYS_HOOKS: config.get('KEYS_HOOKS'),
-  NOTIFY_BEFORE: config.get('NOTIFY_BEFORE')
+let notificationFactory = new NotificationFactory()
+let showsParser = new ShowsParser({
+  keysHooks: config.get('KEYS_HOOKS'),
+  delay: config.get('API_DELAY'),
+  notifyBefore: config.get('NOTIFY_BEFORE'),
+  notificationFactory
 })
 
 apiRequestRepeater.requestAndRepeat()
 apiRequestRepeater.on('result', function(result, error) {
   console.log('apiRequestRepeater error', error)
-  notifyHooks.onUpcomingShows(result)
+  showsParser.onUpcomingShows(result)
 })
