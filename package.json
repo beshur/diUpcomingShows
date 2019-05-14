@@ -4,7 +4,8 @@
   "description": "DI Upcoming Shows through Webhook notifications",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha --exit",
+    "test": "nyc --include=$(git diff --name-only) --reporter=text mocha --exit",
+    "coverage": "nyc --reporter=text --reporter=html mocha --exit",
     "startLocalConf": ". config.sh && node index.js",
     "start": "node index.js",
     "lint": "jshint .",
