@@ -39,6 +39,7 @@
   },
   "pre-commit": [
     "validate",
+    "lint",
     "test"
   ]
 }

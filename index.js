@@ -8,6 +8,9 @@ const config = require('./config')
 const ApiRequest = require('./lib/ApiRequest')
 const RequestRepeater = require('./lib/RequestRepeater')
 const ShowsParser = require('./lib/ShowsParser')
+const NotifyHooks = require('./lib/NotifyHooks')
+const NotificationTimer = require('./lib/NotificationTimer')
+const NotificationPayloadGenerator = require('./lib/NotificationPayloadGenerator')
 const NotificationFactory = require('./lib/NotificationFactory')
 
 app.use(express.static('public'))
@@ -24,7 +27,15 @@ let apiRequestRepeater = new RequestRepeater({
   request: apiRequest.getShows,
   delay: config.get('API_DELAY')
 })
-let notificationFactory = new NotificationFactory()
+let notificationPayloadGenerator = new NotificationPayloadGenerator({
+  hookAvatar: config.get('HOOK_AVATAR'),
+  hookName: config.get('HOOK_NAME')
+})
+let notificationFactory = new NotificationFactory({
+  NotificationTimer: NotificationTimer,
+  NotifyHooks: NotifyHooks,
+  notificationPayloadGenerator: notificationPayloadGenerator
+})
 let showsParser = new ShowsParser({
   keysHooks: config.get('KEYS_HOOKS'),
   delay: config.get('API_DELAY'),

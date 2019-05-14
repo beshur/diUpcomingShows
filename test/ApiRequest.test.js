@@ -2,12 +2,11 @@
 
 const assert = require('chai').assert
 const nock = require('nock')
-const sinon = require('sinon')
 const ApiRequest = require('../lib/ApiRequest')
 const config = require('../config')
 const SHOWS_MOCK = {
   'id': 117313,
-  'name': "2019-05-09",
+  'name': '2019-05-09',
   'show': {
     'id': 13765
   }
@@ -20,18 +19,18 @@ const CORRECT_CONFIG = {
 
 describe('ApiRequest instance', function() {
   it('should instantiate with config', function() {
-    const apiRequest = new ApiRequest(CORRECT_CONFIG)
+    assert((new ApiRequest(CORRECT_CONFIG)) instanceof ApiRequest)
   })
 
   it('should fail without config', function() {
     assert.throws(function() {
-      const apiRequest = new ApiRequest()
+      new ApiRequest()
     }, 'Options is not an object')
   })
 
   it('should fail without API_URL option', function() {
     assert.throws(function() {
-      const apiRequest = new ApiRequest({
+      new ApiRequest({
         API_DELAY: 1
       })
     }, 'missing API_URL option')
@@ -39,7 +38,7 @@ describe('ApiRequest instance', function() {
 
   it('should fail with empty API_URL option', function() {
     assert.throws(function() {
-      const apiRequest = new ApiRequest({
+      new ApiRequest({
         API_DELAY: 1,
         API_URL: ''
       })
@@ -49,7 +48,7 @@ describe('ApiRequest instance', function() {
 
 describe('ApiRequest functions', function() {
 
-  const scope = nock(CORRECT_CONFIG.API_URL)
+  nock(CORRECT_CONFIG.API_URL)
     .persist()
     .get('/')
     .reply(200, SHOWS_MOCK)

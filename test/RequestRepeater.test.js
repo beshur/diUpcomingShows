@@ -1,7 +1,6 @@
 'use strict'
 
 const assert = require('chai').assert
-const nock = require('nock')
 const sinon = require('sinon')
 const RequestRepeater = require('../lib/RequestRepeater')
 const config = require('../config')
@@ -20,17 +19,18 @@ describe('RequestRepeater instance', function() {
       request: MOCK_REQUEST,
       delay: CORRECT_CONFIG.API_DELAY
     })
+    assert(requestRepeater instanceof RequestRepeater, 'requestRepeater is of wrong type')
   })
 
   it('should fail without config', function() {
     assert.throws(function() {
-      const requestRepeater = new RequestRepeater()
+      new RequestRepeater()
     }, 'options is not an object')
   })
 
   it('should fail with request not a function', function() {
     assert.throws(function() {
-      const requestRepeater = new RequestRepeater({
+      new RequestRepeater({
         delay: CORRECT_CONFIG.API_DELAY
       })
     }, 'request option is not a function')
@@ -38,7 +38,7 @@ describe('RequestRepeater instance', function() {
 
   it('should fail with delay not a number', function() {
     assert.throws(function() {
-      const requestRepeater = new RequestRepeater({
+      new RequestRepeater({
         request: MOCK_REQUEST,
       })
     }, 'delay option is not a number')
@@ -56,7 +56,7 @@ describe('RequestRepeater functions', function() {
     })
     let times = 0;
     requestRepeater.requestAndRepeat()
-    requestRepeater.on('result', (result, error) => {
+    requestRepeater.on('result', () => {
       times++
       if (times > 1) {
         requestRepeater.stopTimer()
