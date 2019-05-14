@@ -1,2 +1,4 @@
 node_modules
 config.sh
+.nyc_output
+coverage

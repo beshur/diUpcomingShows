@@ -1,5 +1,5 @@
 [{
-  "artists_tagline": "with Markus Schulz featuring Ferry Corsten",
+  "artists_tagline": "(Test from LOCAL env)",
   "description_html": "<p>This week featuring a guest mix by <a href=\"http://www.ferrycorsten.com\" target=\"_blank\">Ferry Corsten</a> sometime in the 2nd hour!</p>\n",
   "duration": 7260,
   "end_at": "2019-05-09T14:00:00-04:00",
@@ -19,8 +19,8 @@
           "horizontal_banner": "//cdn-images.audioaddict.com/4/9/c/7/6/2/49c762e2152d12b83ebf7e0a75c40198.png{?size,height,width,quality,pad}",
           "compact": "//cdn-images.audioaddict.com/c/4/9/4/6/c/c4946c230965c8ca137408204f0105ee.jpg{?size,height,width,quality,pad}"
         },
-        "key": "trance",
-        "name": "Trance"
+        "key": "main",
+        "name": "Main"
       }
     ],
     "following": false,
@@ -47,7 +47,7 @@
   },
   "show_id": 13765,
   "slug": "2019-05-09",
-  "start_at": "2019-05-10T08:08:00+03:00",
+  "start_at": "2019-05-13T20:04:00+03:00",
   "subtitle": "",
   "tracks": [
     {
