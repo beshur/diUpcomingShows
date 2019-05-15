@@ -13,6 +13,7 @@ let bodyGeneratorMock = {
       content: 'Test message'
   }}
 }
+
 const CORRECT_CONFIG = {
   show: {
     id: 2,
