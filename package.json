@@ -4,9 +4,12 @@
   "description": "DI Upcoming Shows through Webhook notifications",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nyc --reporter=text mocha --exit",
+    "coverage": "nyc --reporter=text --reporter=html mocha --exit",
     "startLocalConf": ". config.sh && node index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "jshint .",
+    "validate": "npm ls"
   },
   "repository": {
     "type": "git",
@@ -21,8 +24,23 @@
   "dependencies": {
     "express": "^4.16.4",
     "moment": "^2.24.0",
+    "nconf": "^0.10.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "underscore": "^1.9.1"
-  }
+  },
+  "devDependencies": {
+    "jshint": "^2.10.2",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "precommit-hook": "^3.0.0",
+    "nock": "^10.0.6",
+    "nyc": "^14.1.1",
+    "sinon": "^7.3.2"
+  },
+  "pre-commit": [
+    "validate",
+    "lint",
+    "test"
+  ]
 }
