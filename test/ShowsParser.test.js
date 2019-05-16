@@ -128,7 +128,7 @@ describe('ShowsParser functions', function() {
       id: 2,
       name: 'This fantastic show',
       artist_tagline: 'with test engine',
-      starts_at: moment().add(5, 'minutes').format(),
+      start_at: moment().add(5, 'minutes').format(),
       show: {
         id: 1,
         channels: [{
@@ -157,7 +157,7 @@ describe('ShowsParser functions', function() {
 
   it('should not trigger show scheduling if it is in 30s or less' , function() {
     const showsParser = new ShowsParser(correctConfig)
-    upcomingShows[0].starts_at = moment().add(correctConfig.notifyBefore/2, 's').format()
+    upcomingShows[0].start_at = moment().add(correctConfig.notifyBefore/2, 's').format()
     upcomingShowsStr = JSON.stringify(upcomingShows)
     mock.expects('schedule').never()
     
@@ -167,7 +167,7 @@ describe('ShowsParser functions', function() {
 
   it('should not trigger show scheduling if it is in 1h 31s or more' , function() {
     const showsParser = new ShowsParser(correctConfig)
-    upcomingShows[0].starts_at = moment().add(60*60+1+correctConfig.notifyBefore/2, 's').format()
+    upcomingShows[0].start_at = moment().add(60*60+1+correctConfig.notifyBefore/2, 's').format()
     upcomingShowsStr = JSON.stringify(upcomingShows)
     mock.expects('schedule').never()
     
