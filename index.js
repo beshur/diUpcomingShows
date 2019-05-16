@@ -34,6 +34,7 @@ let notificationFactory = new NotificationFactory({
   notificationPayloadGenerator: notificationPayloadGenerator
 })
 let showsParser = new ShowsParser({
+  log,
   keysHooks: config.get('KEYS_HOOKS'),
   delay: config.get('API_DELAY'),
   notifyBefore: config.get('NOTIFY_BEFORE'),
