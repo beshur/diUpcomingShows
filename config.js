@@ -7,6 +7,23 @@ const DEFAULTS = {
   PORT: 3000,
   API_URL: 'https://di.fm',
   API_DELAY: 3600000,
+  CHANNELS_KEYS: {
+    'trance': [
+      'trance'
+    ],
+    'vocaltrance': [
+      'trance',
+    ],
+    'epictrance': [
+      'trance',
+    ],
+    'classictrance': [
+      'trance',
+    ],
+    'goapsy': [
+      'trance',
+    ],
+  },
   KEYS_HOOKS: {
     'trance': [ 'https://fake.discordapp.com/api/webhooks/1', 'https://fake.discordapp.com/api/webhooks/2' ]
   },

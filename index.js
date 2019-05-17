@@ -3,8 +3,9 @@
 
 const express = require('express')
 const app = express()
-const config = require('./config')
+const _ = require('underscore')
 
+const config = require('./config')
 const ApiRequest = require('./lib/ApiRequest')
 const RequestRepeater = require('./lib/RequestRepeater')
 const ShowsParser = require('./lib/ShowsParser')
@@ -16,6 +17,25 @@ const NotificationFactory = require('./lib/NotificationFactory')
 const log = console.log
 
 // init
+/*
+ * getKeysHooks
+ * merge two objects through a foreign key
+ */
+let getKeysHooks = (channelsKeys, keysHooks) => {
+  let result = {}
+  if (_.isObject(channelsKeys) && _.isObject(keysHooks)) {
+    result = _.clone(channelsKeys)
+    _.each(result, (foreignKeys, channel) => {
+      let tempKeys = _.clone(foreignKeys)
+      result[channel] = []
+      tempKeys.forEach(key => {
+        result[channel] = result[channel].concat(keysHooks[key])
+      })
+    })
+  }
+  return result
+}
+
 let apiRequest = new ApiRequest({
   API_URL: config.get('API_URL')
 })
@@ -35,7 +55,7 @@ let notificationFactory = new NotificationFactory({
 })
 let showsParser = new ShowsParser({
   log,
-  keysHooks: config.get('KEYS_HOOKS'),
+  keysHooks: getKeysHooks(config.get('CHANNELS_KEYS'), config.get('KEYS_HOOKS')),
   delay: config.get('API_DELAY'),
   notifyBefore: config.get('NOTIFY_BEFORE'),
   notificationFactory
