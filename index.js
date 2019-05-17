@@ -5,6 +5,7 @@ const express = require('express')
 const app = express()
 const _ = require('underscore')
 
+const APP_NAME = require('./package').name
 const config = require('./config')
 const ApiRequest = require('./lib/ApiRequest')
 const RequestRepeater = require('./lib/RequestRepeater')
@@ -14,6 +15,7 @@ const NotificationTimer = require('./lib/NotificationTimer')
 const NotificationPayloadGenerator = require('./lib/NotificationPayloadGenerator')
 const NotificationFactory = require('./lib/NotificationFactory')
 const PostThrottler = require('./lib/PostThrottler')
+const ReportFormatter = require('./lib/ReportFormatter')
 // temp
 const log = console.log
 
@@ -37,6 +39,7 @@ let getKeysHooks = (channelsKeys, keysHooks) => {
   return result
 }
 
+let reportFormatter = new ReportFormatter()
 let postThrottler = new PostThrottler({
   log,
   maxParts: config.get('THROTTLE_MAX')
@@ -86,11 +89,11 @@ app.get('/report', (req, res) => {
   if (req.xhr) {
     res.json(report)
   } else {
-    res.send(report)
+    res.send(reportFormatter.format(report))
   }
 })
 
-app.listen(config.get('PORT'), () => console.log(`Example app listening on port ${config.get('PORT')}!`))
+app.listen(config.get('PORT'), () => console.log(`${APP_NAME} app listening on port ${config.get('PORT')}!`))
 
 
 apiRequestRepeater.requestAndRepeat()

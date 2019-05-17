@@ -1,5 +1,5 @@
 {
-  "name": "diupcomingshows",
+  "name": "diUpcomingShows",
   "version": "1.0.0",
   "description": "DI Upcoming Shows through Webhook notifications",
   "main": "index.js",
