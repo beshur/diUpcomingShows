@@ -30,7 +30,8 @@ const DEFAULTS = {
   NOTIFY_BEFORE: 60000,
   HOOK_NAME: 'DI.FM Shows',
   HOOK_AVATAR: 'https://buznik.net/di/avatar.png',
-  ENABLED: 1
+  ENABLED: 1,
+  THROTTLE_MAX: 1
 }
 
 nconf.env({

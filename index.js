@@ -13,6 +13,7 @@ const NotifyHooks = require('./lib/NotifyHooks')
 const NotificationTimer = require('./lib/NotificationTimer')
 const NotificationPayloadGenerator = require('./lib/NotificationPayloadGenerator')
 const NotificationFactory = require('./lib/NotificationFactory')
+const PostThrottler = require('./lib/PostThrottler')
 // temp
 const log = console.log
 
@@ -36,6 +37,10 @@ let getKeysHooks = (channelsKeys, keysHooks) => {
   return result
 }
 
+let postThrottler = new PostThrottler({
+  log,
+  maxParts: config.get('THROTTLE_MAX')
+})
 let apiRequest = new ApiRequest({
   API_URL: config.get('API_URL')
 })
@@ -58,6 +63,7 @@ let showsParser = new ShowsParser({
   keysHooks: getKeysHooks(config.get('CHANNELS_KEYS'), config.get('KEYS_HOOKS')),
   delay: config.get('API_DELAY'),
   notifyBefore: config.get('NOTIFY_BEFORE'),
+  postThrottler,
   notificationFactory
 })
 

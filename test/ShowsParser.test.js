@@ -12,12 +12,18 @@ const hooks = config.get('KEYS_HOOKS')
 const notificationFactoryApi = {
   schedule: () => {}
 }
+
+const postThrottlerApi = {
+  throttle: () => false
+}
+
 var log = function() {
   console.log(...arguments)
 }
 
 describe('ShowsParser instance', function() {
-  let mock = sinon.mock(_.clone(notificationFactoryApi))
+  let notificationFactoryMock = sinon.mock(_.clone(notificationFactoryApi))
+  let postThrottlerMock = sinon.mock(_.clone(postThrottlerApi))
   const originalLog = log
   var correctConfig = {}
   let logStack = []
@@ -29,10 +35,11 @@ describe('ShowsParser instance', function() {
     }
     correctConfig = {
       log,
-      notificationFactory: mock,
+      notificationFactory: notificationFactoryMock,
       keysHooks: hooks,
       notifyBefore: config.get('NOTIFY_BEFORE'),
-      delay: config.get('API_DELAY')
+      delay: config.get('API_DELAY'),
+      postThrottler: postThrottlerMock
     }
   });
 
@@ -99,6 +106,15 @@ describe('ShowsParser instance', function() {
     }, 'delay option is not a number')
   })
 
+  it('should fail without postThrottler option', function() {
+    let localConfig = _.extend({}, correctConfig, {
+       postThrottler: ''
+    })
+    assert.throws(function() {
+      new ShowsParser(localConfig)
+    }, 'postThrottler option is not an object')
+  })
+
 })
 
 
@@ -108,11 +124,16 @@ describe('ShowsParser functions', function() {
   let logStack = []
   let upcomingShows
   let upcomingShowsStr
-  var mock
+  let notificationFactory
+  let notificationFactoryMock
+  let postThrottler
+  let postThrottlerMock
 
   beforeEach(function() {
-    let notificationFactory = _.clone(notificationFactoryApi)
-    mock = sinon.mock(notificationFactory)
+    notificationFactory = _.clone(notificationFactoryApi)
+    notificationFactoryMock = sinon.mock(notificationFactory)
+    postThrottler = _.clone(postThrottlerApi)
+    postThrottlerMock = sinon.mock(postThrottler)
     logStack = []
     log = function() {
       logStack.push([...arguments])
@@ -122,7 +143,8 @@ describe('ShowsParser functions', function() {
       notificationFactory: notificationFactory,
       keysHooks: hooks,
       notifyBefore: 60000,
-      delay: 3600000
+      delay: 3600000,
+      postThrottler: postThrottler
     }
     upcomingShows = [{
       id: 2,
@@ -149,40 +171,40 @@ describe('ShowsParser functions', function() {
   it('should trigger show scheduling', function() {
     const showsParser = new ShowsParser(correctConfig)
     upcomingShowsStr = JSON.stringify(upcomingShows)
-    mock.expects('schedule').once()
+    notificationFactoryMock.expects('schedule').once()
 
     showsParser.onUpcomingShows(upcomingShowsStr)
-    assert(mock.verify(), 'notificationFactory.schedule was not called')
+    assert(notificationFactoryMock.verify(), 'notificationFactory.schedule was not called')
   })
 
   it('should not trigger show scheduling if it is in 30s or less' , function() {
     const showsParser = new ShowsParser(correctConfig)
     upcomingShows[0].start_at = moment().add(correctConfig.notifyBefore/2, 's').format()
     upcomingShowsStr = JSON.stringify(upcomingShows)
-    mock.expects('schedule').never()
+    notificationFactoryMock.expects('schedule').never()
     
     showsParser.onUpcomingShows(upcomingShowsStr)
-    assert(mock.verify(), 'notificationFactory.schedule was called')
+    assert(notificationFactoryMock.verify(), 'notificationFactory.schedule was called')
   })
 
   it('should not trigger show scheduling if it is in 1h 31s or more' , function() {
     const showsParser = new ShowsParser(correctConfig)
     upcomingShows[0].start_at = moment().add(60*60+1+correctConfig.notifyBefore/2, 's').format()
     upcomingShowsStr = JSON.stringify(upcomingShows)
-    mock.expects('schedule').never()
+    notificationFactoryMock.expects('schedule').never()
     
     showsParser.onUpcomingShows(upcomingShowsStr)
-    assert(mock.verify(), 'notificationFactory.schedule was called')
+    assert(notificationFactoryMock.verify(), 'notificationFactory.schedule was called')
   })
 
   it('should not trigger show scheduling if there isn\'t a proper hook'  , function() {
     const showsParser = new ShowsParser(correctConfig)
     upcomingShows[0].show.channels[0].key = ''
     upcomingShowsStr = JSON.stringify(upcomingShows)
-    mock.expects('schedule').never()
+    notificationFactoryMock.expects('schedule').never()
     
     showsParser.onUpcomingShows(upcomingShowsStr)
-    assert(mock.verify(), 'notificationFactory.schedule was called')
+    assert(notificationFactoryMock.verify(), 'notificationFactory.schedule was called')
   })
 })
 
