@@ -1,5 +1,6 @@
 'use strict'
 
+const _ = require('underscore')
 const nconf = require('nconf')
 
 const DEFAULTS = {
@@ -11,11 +12,12 @@ const DEFAULTS = {
   },
   NOTIFY_BEFORE: 60000,
   HOOK_NAME: 'DI.FM Shows',
-  HOOK_AVATAR: 'https://buznik.net/di/avatar.png'
+  HOOK_AVATAR: 'https://buznik.net/di/avatar.png',
+  ENABLED: 1
 }
 
 nconf.env({
-    whitelist: ['PORT', 'API_URL', 'API_DELAY', 'KEYS_HOOKS', 'NOTIFY_BEFORE'],
+    whitelist: _.keys(DEFAULTS),
     parseValues: true
   }).argv()
   .defaults(DEFAULTS)

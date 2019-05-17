@@ -42,6 +42,11 @@ let showsParser = new ShowsParser({
 })
 
 // app start
+log('ENABLED', config.get('ENABLED'))
+if (!config.get('ENABLED')) {
+  return
+}
+
 app.use(express.static('public'))
 
 app.get('/', (req, res) => res.send('Hello World!'))
