@@ -23,7 +23,7 @@
   "homepage": "https://github.com/beshur/diUpcomingShows#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "nconf": "^0.10.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
